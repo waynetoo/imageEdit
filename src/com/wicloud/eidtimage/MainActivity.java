@@ -1,7 +1,9 @@
-package com.example.imagedemo;
+package com.wicloud.eidtimage;
 
 import java.io.BufferedInputStream;
 import java.io.FileInputStream;
+
+import com.wicloud.editimage.demo.R;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -17,14 +19,13 @@ import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.RadioGroup.OnCheckedChangeListener;
 import android.widget.RelativeLayout;
 import android.widget.SeekBar;
 import android.widget.SeekBar.OnSeekBarChangeListener;
 import android.widget.TextView;
-
-import com.example.imagedemo.DrawZoomImageView.ModeEnum;
 
 public class MainActivity extends Activity implements OnClickListener, OnCheckedChangeListener {
 
@@ -37,6 +38,9 @@ public class MainActivity extends Activity implements OnClickListener, OnChecked
 	private RadioGroup colorGroup, action;
 	private boolean isBack = true;
 	private SeekBar seekBar; // 控制画笔宽度
+	
+	private RadioButton rbTy, rbXp, rbWord;
+	private int currStatu;//当前状态；
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -47,21 +51,26 @@ public class MainActivity extends Activity implements OnClickListener, OnChecked
 		rl_contrl = (RelativeLayout) findViewById(R.id.rl_contrl);
 		rl_contrl.setVisibility(View.VISIBLE);
 		iv_result.setVisibility(View.GONE);
+		bar_title = (TextView) findViewById(R.id.bar_title);
 		seekBar = (SeekBar) findViewById(R.id.seekBar);
 //		ll_color = (LinearLayout) findViewById(R.id.ll_color);
 		ll_edit = (LinearLayout) findViewById(R.id.ll_edit);
-		iv_photo.setMode(ModeEnum.TY);
 
 		seekBar.setMax(iv_photo.lineStrokeWidthMax);
 		seekBar.setProgress(iv_photo.getTyStrokeWidth());
 		iv_photo.setTyStrokeWidth(seekBar.getProgress());
-
-		bar_title = (TextView) findViewById(R.id.bar_title);
+		currStatu = DrawZoomImageView.STATUS_TY;
+		bar_title.setTextColor(Color.RED);
+		iv_photo.setCurrentStatus(currStatu);
 
 		tv_open = (TextView) findViewById(R.id.tv_open);
 		btn_revoke = (Button) findViewById(R.id.btn_revoke);
 		btn_recovery = (Button) findViewById(R.id.btn_recovery);
 		tv_finish = (TextView) findViewById(R.id.tv_finish);
+		
+		rbTy = (RadioButton) findViewById(R.id.rb_ty);
+		rbXp = (RadioButton) findViewById(R.id.rb_xp);
+		rbWord = (RadioButton) findViewById(R.id.rb_word);
 
 		tv_open.setOnClickListener(this);
 		btn_revoke.setOnClickListener(this);
@@ -85,10 +94,17 @@ public class MainActivity extends Activity implements OnClickListener, OnChecked
 			@Override
 			public void onProgressChanged(SeekBar seekBar, int progress,
 					boolean fromUser) {
-				if (iv_photo.getMode() == ModeEnum.TY) {
-					iv_photo.setTyStrokeWidth(seekBar.getProgress());
-				} else if (iv_photo.getMode() == ModeEnum.XP) {
-					iv_photo.setXpStrokeWidth(seekBar.getProgress());
+				if (fromUser) {
+					if (currStatu == DrawZoomImageView.STATUS_TY) {
+						iv_photo.setTyStrokeWidth(seekBar.getProgress());
+
+					} else if (currStatu == DrawZoomImageView.STATUS_XP) {
+						iv_photo.setXpStrokeWidth(seekBar.getProgress());
+
+					} else if (currStatu == DrawZoomImageView.STATUS_WORD) {
+						iv_photo.setWordStrokeWidth(seekBar.getProgress() + 8);
+						bar_title.setText(String.valueOf(progress + 8));
+					}
 				}
 			}
 		});
@@ -100,44 +116,34 @@ public class MainActivity extends Activity implements OnClickListener, OnChecked
 		if (group.equals(colorGroup)) {
 			switch (checkedId) {
 			case R.id.rb_xp:
-				iv_photo.setMode(ModeEnum.XP);
 //				ll_color.setVisibility(View.GONE);
-				seekBar.setMax(iv_photo.xpStrokeWidthMax); // 设置最大
-				seekBar.setProgress(iv_photo.getXpStrokeWidth());
 				bar_title.setTextColor(Color.BLACK);
 				break;
 			case R.id.green:
-				iv_photo.setMode(ModeEnum.TY);
 				iv_photo.setTyColor(Color.GREEN);
 				bar_title.setTextColor(Color.GREEN);
 				break;
 			case R.id.blue:
-				iv_photo.setMode(ModeEnum.TY);
 				iv_photo.setTyColor(Color.BLUE);
 				bar_title.setTextColor(Color.BLUE);
 				break;
 			case R.id.yellow:
-				iv_photo.setMode(ModeEnum.TY);
 				iv_photo.setTyColor(Color.YELLOW);
 				bar_title.setTextColor(Color.YELLOW);
 				break;
 			case R.id.red:
-				iv_photo.setMode(ModeEnum.TY);
 				iv_photo.setTyColor(Color.RED);
 				bar_title.setTextColor(Color.RED);
 				break;
 			case R.id.black:
-				iv_photo.setMode(ModeEnum.TY);
 				iv_photo.setTyColor(Color.BLACK);
 				bar_title.setTextColor(Color.BLACK);
 				break;
 			case R.id.white:
-				iv_photo.setMode(ModeEnum.TY);
 				iv_photo.setTyColor(Color.WHITE);
 				bar_title.setTextColor(Color.WHITE);
 				break;
 			default:
-				iv_photo.setMode(ModeEnum.TY);
 				iv_photo.setTyColor(Color.BLACK);
 				bar_title.setTextColor(Color.BLACK);
 				break;
@@ -146,16 +152,52 @@ public class MainActivity extends Activity implements OnClickListener, OnChecked
 		} else if (group.equals(action)) {
 			switch (checkedId) {
 			case R.id.rb_ty:
-				iv_photo.setMode(ModeEnum.TY);
 				ll_edit.setVisibility(View.VISIBLE);
-				seekBar.setMax(iv_photo.lineStrokeWidthMax); // 设置最大
-				seekBar.setProgress(iv_photo.getTyStrokeWidth());
+
 				break;
 			case R.id.rb_word:
+
 				break;
 			}
 		}
 
+		if (currStatu != getCurrStatus()) {
+			currStatu = getCurrStatus();
+			//设置状态
+			iv_photo.setCurrentStatus(currStatu);
+			changeSeekBar(currStatu);
+		}
+	}
+
+	/**
+	 *  当前编辑图片状态
+	 * @return 
+	 */
+	public int getCurrStatus(){
+		if (rbXp.isChecked()) {
+			return DrawZoomImageView.STATUS_XP;
+		} else if (rbTy.isChecked()) {
+			return DrawZoomImageView.STATUS_TY;
+		} else if (rbWord.isChecked()) {
+			return DrawZoomImageView.STATUS_WORD;
+		}
+		return DrawZoomImageView.STATUS_TY;
+	}
+
+	public void changeSeekBar(int statu) {
+		if (statu == DrawZoomImageView.STATUS_XP) {
+			bar_title.setText("橡皮宽度");
+			seekBar.setMax(iv_photo.xpStrokeWidthMax); // 设置最大
+			seekBar.setProgress(iv_photo.getXpStrokeWidth());
+		} else if (statu == DrawZoomImageView.STATUS_TY) {
+			bar_title.setText("画笔宽度");
+			seekBar.setMax(iv_photo.lineStrokeWidthMax); // 设置最大
+			seekBar.setProgress(iv_photo.getTyStrokeWidth());
+		} else if (statu == DrawZoomImageView.STATUS_WORD) {
+			bar_title.setText(String.valueOf(iv_photo.getWordStrokeWidth()));
+			seekBar.setMax(iv_photo.wordStrokeWidthMax); // 设置最大
+			seekBar.setProgress(iv_photo.getWordStrokeWidth() - 8);
+		}
 	}
 
 	@Override
@@ -189,25 +231,6 @@ public class MainActivity extends Activity implements OnClickListener, OnChecked
 			intent2.setType("image/*");
 			startActivityForResult(intent2, 2);
 			break;
-//		case R.id.btn_ty: // 模式为涂鸦
-//			iv_photo.setMode(ModeEnum.TY);
-//			ll_edit.setVisibility(View.VISIBLE);
-//			seekBar.setMax(iv_photo.lineStrokeWidthMax); // 设置最大
-//			seekBar.setProgress(iv_photo.getTyStrokeWidth());
-//			break;
-//		case R.id.btn_xp: // 模式为橡皮
-//			iv_photo.setMode(ModeEnum.XP);
-////			ll_color.setVisibility(View.GONE);
-//			seekBar.setMax(iv_photo.xpStrokeWidthMax); // 设置最大
-//			seekBar.setProgress(iv_photo.getXpStrokeWidth());
-//			break;
-
-//		case R.id.btn_word: // 模式为文字
-////			iv_photo.setMode(ModeEnum.XP);
-////			ll_edit.setVisibility(View.GONE);
-////			seekBar.setMax(iv_photo.xpStrokeWidthMax); // 设置最大
-////			seekBar.setProgress(iv_photo.getXpStrokeWidth());
-//			break;
 		case R.id.btn_revoke: // 撤销
 			iv_photo.revoke();
 			break;

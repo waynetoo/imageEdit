@@ -15,7 +15,7 @@
         android:layout_height="match_parent"
         android:layout_below="@+id/iv_result" >
 
-        <com.example.imagedemo.DrawZoomImageView
+        <com.wicloud.eidtimage.DrawZoomImageView
             android:id="@+id/iv_photo"
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
@@ -36,14 +36,16 @@
                 android:id="@+id/bar_title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="画笔宽度" />
+                android:gravity="center"
+                android:text="画笔宽度" 
+                android:minWidth="60dip"/>
 
             <SeekBar
                 android:id="@+id/seekBar"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content" 
-                android:layout_marginLeft="10dip"
-                android:layout_marginRight="10dip"/>
+                android:layout_marginLeft="20dip"
+                android:layout_marginRight="30dip"/>
         </LinearLayout>
 
         <HorizontalScrollView

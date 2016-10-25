@@ -1,4 +1,4 @@
-package com.example.imagedemo;
+package com.wicloud.eidtimage;
 
 import android.content.Context;
 import android.text.TextUtils;
@@ -10,8 +10,8 @@ public class MyUtil {
 
 	private static String TAG = "MyUtil";
     /**
-     * 唯一的toast
-     */
+	 * 唯一的toast
+	 */
     private static Toast mToast = null;
 
 	public synchronized static void showToast(Context mContext, int srcId,
@@ -58,37 +58,30 @@ public class MyUtil {
 	}
 
 	public static void TOAST(Context context, String msg) {
-		if (Constant.isDebug)
 			Toast.makeText(context, msg, Toast.LENGTH_SHORT).show();
 	}
 
 	public static void LOG_V(String TAG, String msg) {
-		if (Constant.isDebug)
 			Log.v(TAG, msg);
 	}
 
 	public static void LOG_I(String TAG, String msg) {
-		if (Constant.isDebug)
 			Log.i(TAG, msg);
 	}
 
 	public static void LOG_D(String TAG, String msg) {
-		if (Constant.isDebug)
 			Log.d(TAG, msg);
 	}
 
 	public static void LOG_W(String TAG, String msg) {
-		if (Constant.isDebug)
 			Log.w(TAG, msg);
 	}
 
 	public static void LOG_E(String TAG, String msg) {
-		if (Constant.isDebug)
 			Log.e(TAG, msg);
 	}
 
 	public static void sysout(String clazz, String text) {
-		if (Constant.isDebug)
 			System.out.println(clazz + " " + text);
 	}
 
