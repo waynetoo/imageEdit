@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<EditText xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/et_word"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:background="@drawable/imgedit_edittext_pop"
+    android:hint="点击输入文字"
+    android:inputType="text"
+    android:singleLine="false" >
+</EditText>

@@ -3,8 +3,6 @@ package com.wicloud.eidtimage;
 import java.io.BufferedInputStream;
 import java.io.FileInputStream;
 
-import com.wicloud.editimage.demo.R;
-
 import android.app.Activity;
 import android.content.Intent;
 import android.database.Cursor;
@@ -27,6 +25,8 @@ import android.widget.SeekBar;
 import android.widget.SeekBar.OnSeekBarChangeListener;
 import android.widget.TextView;
 
+import com.wicloud.editimage.demo.R;
+
 public class MainActivity extends Activity implements OnClickListener, OnCheckedChangeListener {
 
 	private DrawZoomImageView iv_photo;
@@ -45,7 +45,7 @@ public class MainActivity extends Activity implements OnClickListener, OnChecked
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_main);
+		setContentView(R.layout.img_edit_main);
 		iv_photo = (DrawZoomImageView) findViewById(R.id.iv_photo);
 		iv_result = (ImageView) findViewById(R.id.iv_result);
 		rl_contrl = (RelativeLayout) findViewById(R.id.rl_contrl);

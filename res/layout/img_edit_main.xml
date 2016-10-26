@@ -20,7 +20,6 @@
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
             android:layout_above="@+id/ll_btn"
-            android:layout_margin="10dip"
             android:background="#000000" />
 
         <LinearLayout
@@ -29,7 +28,8 @@
             android:layout_height="wrap_content"
             android:layout_above="@+id/ll_btn1"
             android:gravity="center_vertical"
-             android:background="@color/gray"
+            android:background="@color/gray"
+            android:padding="5dip"
             android:orientation="horizontal" >
 
             <TextView
@@ -44,8 +44,8 @@
                 android:id="@+id/seekBar"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content" 
-                android:layout_marginLeft="20dip"
-                android:layout_marginRight="30dip"/>
+                android:layout_marginLeft="10dip"
+                android:layout_marginRight="20dip"/>
         </LinearLayout>
 
         <HorizontalScrollView
@@ -95,7 +95,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_margin="10dp"
-                        android:background="@drawable/default_rect_selector"
+                        android:background="@drawable/imgedit_default_rect_selector"
                         android:button="@null"
                         android:text="橡皮" />
 
@@ -104,7 +104,7 @@
                         android:layout_width="35dp"
                         android:layout_height="35dp"
                         android:layout_margin="10dp"
-                        android:background="@drawable/red_rect_selector"
+                        android:background="@drawable/imgedit_red_rect_selector"
                         android:button="@null"
                         android:checked="true" />
 
@@ -113,7 +113,7 @@
                         android:layout_width="35dp"
                         android:layout_height="35dp"
                         android:layout_margin="10dp"
-                        android:background="@drawable/yellow_rect_selector"
+                        android:background="@drawable/imgedit_yellow_rect_selector"
                         android:button="@null" />
 
                     <RadioButton
@@ -121,7 +121,7 @@
                         android:layout_width="35dp"
                         android:layout_height="35dp"
                         android:layout_margin="10dp"
-                        android:background="@drawable/green_rect_selector"
+                        android:background="@drawable/imgedit_green_rect_selector"
                         android:button="@null" />
 
                     <RadioButton
@@ -129,7 +129,7 @@
                         android:layout_width="35dp"
                         android:layout_height="35dp"
                         android:layout_margin="10dp"
-                        android:background="@drawable/bule_rect_selector"
+                        android:background="@drawable/imgedit_bule_rect_selector"
                         android:button="@null" />
 
                     <RadioButton
@@ -137,7 +137,7 @@
                         android:layout_width="35dp"
                         android:layout_height="35dp"
                         android:layout_margin="10dp"
-                        android:background="@drawable/white_rect_selector"
+                        android:background="@drawable/imgedit_white_rect_selector"
                         android:button="@null" />
 
                     <RadioButton
@@ -145,7 +145,7 @@
                         android:layout_width="35dp"
                         android:layout_height="35dp"
                         android:layout_margin="10dp"
-                        android:background="@drawable/black_rect_selector"
+                        android:background="@drawable/imgedit_black_rect_selector"
                         android:button="@null" />
                 </RadioGroup>
             </LinearLayout>
@@ -196,7 +196,7 @@
                     android:layout_weight="1"
                      android:gravity="center"
                      android:padding="10dip"
-                    android:background="@drawable/bottom_text_selector"
+                    android:background="@drawable/imgedit_bottom_text_selector"
                     android:button="@null"
                     android:checked="true"
                     android:text="涂鸦" />
@@ -208,7 +208,7 @@
                     android:layout_weight="1"
                      android:gravity="center"
                      android:padding="10dip"
-                    android:background="@drawable/bottom_text_selector"
+                    android:background="@drawable/imgedit_bottom_text_selector"
                     android:button="@null"
                     android:text="文字" />
             </RadioGroup>

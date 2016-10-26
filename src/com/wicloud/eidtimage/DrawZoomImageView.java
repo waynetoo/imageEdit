@@ -27,9 +27,9 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.WindowManager.LayoutParams;
 import android.view.animation.ScaleAnimation;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.PopupWindow;
+import android.widget.PopupWindow.OnDismissListener;
 
 import com.wicloud.editimage.demo.R;
 
@@ -71,11 +71,11 @@ public class DrawZoomImageView extends View {
 	private Canvas mCanvas; //画布（用于记录涂鸦和擦除）
 	private Paint mPaint; //画笔
 	public int lineStrokeWidthMax = 30; //涂鸦画笔最大宽度
-	private float lineStrokeWidth = 15f; //默认涂鸦画笔宽度
+	private float lineStrokeWidth = 8f; //默认涂鸦画笔宽度
 	public int xpStrokeWidthMax = 70; //橡皮擦画笔最大宽度
-	private float xpStrokeWidth = 30f; //默认橡皮擦宽度
-	public int wordStrokeWidthMax = 46; //word画笔最大宽度
-	private float wordStrokeWidth = 25; //默认word画笔宽度
+	private float xpStrokeWidth = 25f; //默认橡皮擦宽度
+	public int wordStrokeWidthMax = 46; //word字体大小最大宽度
+	private float wordStrokeWidth = 20f; //默认word字体大小
 	private int mColor; //默认涂鸦画笔颜色
 	private Path mPath; //涂鸦和擦除路径
 	private DrawPath mDp; //记录Path路径的对象
@@ -114,7 +114,7 @@ public class DrawZoomImageView extends View {
 	private void initWordPaint() {
 		mPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
 		mPaint.setColor(mColor);
-		mPaint.setTextSize(wordStrokeWidth);
+		mPaint.setTextSize(DisplayUtil.sp2px(getContext(), wordStrokeWidth));
 		mPaint.setStrokeWidth(1);
 		mPaint.setTypeface(Typeface.DEFAULT);
 		mPaint.setStyle(Style.FILL);
@@ -327,7 +327,7 @@ public class DrawZoomImageView extends View {
 		switch (event.getAction()) {
 		case MotionEvent.ACTION_DOWN:
 			Log.i(TAG, "DRAW_WORD+ACTION_DOWN");
-			showPop((int) event.getX(), (int) event.getY());
+			showPop((int) event.getX(), (int) event.getY(), (int) event.getRawX(), (int) event.getRawY());
 			break;
 		default:
 			break;
@@ -340,18 +340,23 @@ public class DrawZoomImageView extends View {
 	 * @param x
 	 * @param y
 	 */
-	private void showPop(final float x, final float y) {
+	private void showPop(final float x, final float y, final float rawX, final float rawY) {
 		if (popupWindow != null && popupWindow.isShowing()) {
 			popupWindow.dismiss();
 		}
-		View contentView = View.inflate(getContext(), R.layout.popupwindow, null);
+		View contentView = View.inflate(getContext(), R.layout.img_edit_popupwindow, null);
 		final EditText etWord = (EditText) contentView.findViewById(R.id.et_word);
 		etWord.setInputType(InputType.TYPE_CLASS_TEXT);
-		Button btnOk = (Button) contentView.findViewById(R.id.btn_ok);
-		btnOk.setOnClickListener(new OnClickListener() {
+		etWord.setTextSize(wordStrokeWidth);
+		etWord.setHintTextColor(mColor);
+
+		popupWindow = new PopupWindow(contentView, LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
+		popupWindow.setFocusable(true);
+		popupWindow.setOnDismissListener(new OnDismissListener() {
 
 			@Override
-			public void onClick(View v) {
+			public void onDismiss() {
+
 				String word = etWord.getText().toString().trim();
 				if (!TextUtils.isEmpty(word)) {
 					mDp = new DrawPath();
@@ -360,7 +365,7 @@ public class DrawZoomImageView extends View {
 					wor.reset(matrix);
 					mDp.word = wor;
 					mCanvas.drawText(wor.getWordString(), wor.getLeft(), wor.getTop(), wor.getPaint());
-					
+
 					mPathList.add(mDp);
 					mAllPathList.add(mDp);
 
@@ -370,12 +375,12 @@ public class DrawZoomImageView extends View {
 				if (popupWindow != null && popupWindow.isShowing()) {
 					popupWindow.dismiss();
 				}
+
 			}
 		});
-		popupWindow = new PopupWindow(contentView, LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
-		popupWindow.setFocusable(true);
 		popupWindow.setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));// PopupWindow没有背景色，必须设置背景色
-		popupWindow.showAtLocation(this, Gravity.TOP + Gravity.LEFT, (int) x + getLeft(), (int) y + getTop());
+		popupWindow.showAtLocation(this, Gravity.TOP | Gravity.LEFT, (int) rawX,
+				(int) (rawY - DisplayUtil.sp2px(getContext(), wordStrokeWidth)));//多次测试，pop与draw的字体差一个字体的高度。可能是draw从下计算，pop从上往下计算
 		ScaleAnimation animation = new ScaleAnimation(0.2f, 1.2f, 0.2f, 1.2f, 0.5f, 0.5f);
 		animation.setDuration(100);
 		// animation.setFillAfter(true);
@@ -508,7 +513,6 @@ public class DrawZoomImageView extends View {
 				mDp.paint = mPaint;
 				//单指触摸，为编辑模式
 				mPath.moveTo(x, y);
-
 			}
 			// 手指离开屏幕时将临时值还原
 			lastCenterPointX = -1;
