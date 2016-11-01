@@ -3,6 +3,8 @@ package com.wicloud.eidtimage;
 import java.io.BufferedInputStream;
 import java.io.FileInputStream;
 
+import com.wicloud.editimage.demo.R;
+
 import android.app.Activity;
 import android.content.Intent;
 import android.database.Cursor;
@@ -25,7 +27,6 @@ import android.widget.SeekBar;
 import android.widget.SeekBar.OnSeekBarChangeListener;
 import android.widget.TextView;
 
-import com.wicloud.editimage.demo.R;
 
 public class MainActivity extends Activity implements OnClickListener, OnCheckedChangeListener {
 

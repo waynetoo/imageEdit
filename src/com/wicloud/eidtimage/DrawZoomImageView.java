@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+import com.wicloud.editimage.demo.R;
+
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Bitmap.Config;
@@ -31,7 +33,6 @@ import android.widget.EditText;
 import android.widget.PopupWindow;
 import android.widget.PopupWindow.OnDismissListener;
 
-import com.wicloud.editimage.demo.R;
 
 /**
  * 自定义涂鸦控件，支持多点触控放大缩小、移动
