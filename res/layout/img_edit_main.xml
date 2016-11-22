@@ -98,6 +98,15 @@
                         android:background="@drawable/imgedit_default_rect_selector"
                         android:button="@null"
                         android:text="橡皮" />
+                    
+                    <RadioButton
+                        android:id="@+id/rb_arrow"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="10dp"
+                        android:background="@drawable/imgedit_default_rect_selector"
+                        android:button="@null"
+                        android:text="箭头" />
 
                     <RadioButton
                         android:id="@+id/red"

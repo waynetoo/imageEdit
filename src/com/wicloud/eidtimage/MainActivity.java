@@ -3,8 +3,6 @@ package com.wicloud.eidtimage;
 import java.io.BufferedInputStream;
 import java.io.FileInputStream;
 
-import com.wicloud.editimage.demo.R;
-
 import android.app.Activity;
 import android.content.Intent;
 import android.database.Cursor;
@@ -27,6 +25,8 @@ import android.widget.SeekBar;
 import android.widget.SeekBar.OnSeekBarChangeListener;
 import android.widget.TextView;
 
+import com.wicloud.editimage.demo.R;
+
 
 public class MainActivity extends Activity implements OnClickListener, OnCheckedChangeListener {
 
@@ -40,7 +40,7 @@ public class MainActivity extends Activity implements OnClickListener, OnChecked
 	private boolean isBack = true;
 	private SeekBar seekBar; // 控制画笔宽度
 	
-	private RadioButton rbTy, rbXp, rbWord;
+	private RadioButton rbTy, rbXp, rbWord, rbArrow;
 	private int currStatu;//当前状态；
 
 	@Override
@@ -72,6 +72,7 @@ public class MainActivity extends Activity implements OnClickListener, OnChecked
 		rbTy = (RadioButton) findViewById(R.id.rb_ty);
 		rbXp = (RadioButton) findViewById(R.id.rb_xp);
 		rbWord = (RadioButton) findViewById(R.id.rb_word);
+		rbArrow = (RadioButton) findViewById(R.id.rb_arrow); //TODO
 
 		tv_open.setOnClickListener(this);
 		btn_revoke.setOnClickListener(this);
@@ -96,7 +97,8 @@ public class MainActivity extends Activity implements OnClickListener, OnChecked
 			public void onProgressChanged(SeekBar seekBar, int progress,
 					boolean fromUser) {
 				if (fromUser) {
-					if (currStatu == DrawZoomImageView.STATUS_TY) {
+					//TODO
+					if (currStatu == DrawZoomImageView.STATUS_TY || currStatu == DrawZoomImageView.STATUS_ARROW) {
 						iv_photo.setTyStrokeWidth(seekBar.getProgress());
 
 					} else if (currStatu == DrawZoomImageView.STATUS_XP) {
@@ -119,6 +121,8 @@ public class MainActivity extends Activity implements OnClickListener, OnChecked
 			case R.id.rb_xp:
 //				ll_color.setVisibility(View.GONE);
 				bar_title.setTextColor(Color.BLACK);
+				break;
+			case R.id.rb_arrow:
 				break;
 			case R.id.green:
 				iv_photo.setTyColor(Color.GREEN);
@@ -154,10 +158,10 @@ public class MainActivity extends Activity implements OnClickListener, OnChecked
 			switch (checkedId) {
 			case R.id.rb_ty:
 				ll_edit.setVisibility(View.VISIBLE);
-
+				rbArrow.setVisibility(View.VISIBLE);
 				break;
 			case R.id.rb_word:
-
+				rbArrow.setVisibility(View.GONE);//TODO
 				break;
 			}
 		}
@@ -181,6 +185,8 @@ public class MainActivity extends Activity implements OnClickListener, OnChecked
 			return DrawZoomImageView.STATUS_TY;
 		} else if (rbWord.isChecked()) {
 			return DrawZoomImageView.STATUS_WORD;
+		} else if (rbArrow.isChecked()) {
+			return DrawZoomImageView.STATUS_ARROW;//TODO
 		}
 		return DrawZoomImageView.STATUS_TY;
 	}
@@ -192,6 +198,10 @@ public class MainActivity extends Activity implements OnClickListener, OnChecked
 			seekBar.setProgress(iv_photo.getXpStrokeWidth());
 		} else if (statu == DrawZoomImageView.STATUS_TY) {
 			bar_title.setText("画笔宽度");
+			seekBar.setMax(iv_photo.lineStrokeWidthMax); // 设置最大
+			seekBar.setProgress(iv_photo.getTyStrokeWidth());
+		} else if (statu == DrawZoomImageView.STATUS_ARROW) {
+			bar_title.setText("箭头宽度");
 			seekBar.setMax(iv_photo.lineStrokeWidthMax); // 设置最大
 			seekBar.setProgress(iv_photo.getTyStrokeWidth());
 		} else if (statu == DrawZoomImageView.STATUS_WORD) {
@@ -212,9 +222,9 @@ public class MainActivity extends Activity implements OnClickListener, OnChecked
 				//按我个人理解 这个是获得用户选择的图片的索引值
 	            int column_index = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
 				//将光标移至开头 ，这个很重要，不小心很容易引起越界
-	            cursor.moveToFirst();
+				cursor.moveToFirst();
 				//最后根据索引值获取图片路径
-	            String path = cursor.getString(column_index);
+				String path = cursor.getString(column_index);
 				
 				Bitmap bitmap = readBitmapAutoSize(path, iv_photo.getWidth(), iv_photo.getHeight());
 				iv_photo.setImageBitmap(bitmap);

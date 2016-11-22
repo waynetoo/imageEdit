@@ -4,8 +4,6 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-import com.wicloud.editimage.demo.R;
-
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Bitmap.Config;
@@ -33,6 +31,8 @@ import android.widget.EditText;
 import android.widget.PopupWindow;
 import android.widget.PopupWindow.OnDismissListener;
 
+import com.wicloud.editimage.demo.R;
+
 
 /**
  * 自定义涂鸦控件，支持多点触控放大缩小、移动
@@ -46,7 +46,8 @@ public class DrawZoomImageView extends View {
 	public static final int STATUS_NONE = 1;
 //	public static final int STATUS_ZOOM_OUT = 3; //图片放大状态常量
 //	public static final int STATUS_ZOOM_IN = 4; //图片缩小状态常量
-	public static final int STATUS_TY = 10; //涂鸦
+	public static final int STATUS_TY = 10;//涂鸦
+	public static final int STATUS_ARROW = 13; //画箭头
 	public static final int STATUS_XP = 11; //橡皮
 	public static final int STATUS_WORD = 12; //文字
 //	private ModeEnum mode = ModeEnum.TY; //模式（当先编辑是橡皮还是涂鸦）
@@ -68,7 +69,7 @@ public class DrawZoomImageView extends View {
 	private float scaledRatio; //记录手指移动的距离所造成的缩放比例
 	private float initRatio; //记录图片初始化时的缩放比例
 	private double lastFingerDis; //记录上次两指之间的距离
-	
+
 	private Canvas mCanvas; //画布（用于记录涂鸦和擦除）
 	private Paint mPaint; //画笔
 	public int lineStrokeWidthMax = 30; //涂鸦画笔最大宽度
@@ -92,6 +93,13 @@ public class DrawZoomImageView extends View {
 		public float ratio; //缩放比例
 		public float strokeWidth; //画笔的宽度
 		public Word word;
+		public Arrow arrow;
+		public int statusType;
+
+		public DrawPath(int statusType) {
+			super();
+			this.statusType = statusType;
+		}
 	}
 	public DrawZoomImageView(Context context, AttributeSet attrs) {
 		super(context, attrs);
@@ -101,7 +109,7 @@ public class DrawZoomImageView extends View {
 	private void init(){
 		matrix = new Matrix();
 		mColor = 0xFFFF0000; //默认为红色
-        mPathList = new ArrayList<DrawPath>();
+		mPathList = new ArrayList<DrawPath>();
 		mAllPathList = new ArrayList<DrawPath>();
 	}
 	private void initLinePaint(){
@@ -214,16 +222,24 @@ public class DrawZoomImageView extends View {
         	Iterator<DrawPath> iter = mPathList.iterator();
         	while (iter.hasNext()){
         		DrawPath drawPath = iter.next();
-				if (null == drawPath.word) {
-					drawPath.paint.setStrokeWidth(drawPath.strokeWidth / drawPath.ratio);//根据缩放比例，改变画笔粗细
-					mCanvas.drawPath(drawPath.path, drawPath.paint);
-				} else {
-					mCanvas.drawText(drawPath.word.getWordString(), drawPath.word.getLeft(), drawPath.word.getTop(),
-							drawPath.word.getPaint());
-				}
+				drawAll(drawPath);
         	}
 			invalidate(); //最后调用onDraw将画好的图片画入控件的canvas
         }
+	}
+	
+	public void drawAll(DrawPath drawPath) {
+		if (STATUS_TY == drawPath.statusType) {
+			drawPath.paint.setStrokeWidth(drawPath.strokeWidth / drawPath.ratio);//根据缩放比例，改变画笔粗细
+			mCanvas.drawPath(drawPath.path, drawPath.paint);
+		} else if (STATUS_WORD == drawPath.statusType) {
+			mCanvas.drawText(drawPath.word.getWordString(), drawPath.word.getLeft(),
+					drawPath.word.getTop(),
+					drawPath.word.getPaint());
+		} else if (STATUS_ARROW == drawPath.statusType) {
+			Arrow aw = drawPath.arrow;
+			drawAL(aw.sx, aw.sy, aw.ex, aw.ey);
+		}
 	}
 	
 	/**
@@ -241,14 +257,7 @@ public class DrawZoomImageView extends View {
         		Iterator<DrawPath> iter = mPathList.iterator();
             	while (iter.hasNext()){
             		DrawPath drawPath = iter.next();
-					if (null == drawPath.word) {
-						drawPath.paint.setStrokeWidth(drawPath.strokeWidth / drawPath.ratio);//根据缩放比例，改变画笔粗细
-						mCanvas.drawPath(drawPath.path, drawPath.paint);
-					} else {
-						mCanvas.drawText(drawPath.word.getWordString(), drawPath.word.getLeft(),
-								drawPath.word.getTop(),
-								drawPath.word.getPaint());
-					}
+					drawAll(drawPath);
             	}
 				invalidate(); //最后调用onDraw将画好的图片画入控件的canvas
         	}
@@ -262,26 +271,19 @@ public class DrawZoomImageView extends View {
 		if (null == sourceBitmap) //还未植入图片
 			return null;
 		//①、创建新的空画布
-		Bitmap mBitmap = Bitmap.createBitmap(sourceBitmap.getWidth(),sourceBitmap.getHeight(), Config.ARGB_8888);
+		Bitmap mBitmap = Bitmap.createBitmap(sourceBitmap.getWidth(), sourceBitmap.getHeight(), Config.ARGB_8888);
 		Canvas canvas = new Canvas(mBitmap);
 		//②、将涂鸦和擦除的图片重新画到背景上
 		mCanvas.drawColor(Color.TRANSPARENT, PorterDuff.Mode.CLEAR); //清空画布
 		//将涂鸦和擦除的痕迹一条条画上去
-        if(mPathList != null && mPathList.size() > 0){
+		if (mPathList != null && mPathList.size() > 0) {
         	Iterator<DrawPath> iter = mPathList.iterator();
         	while (iter.hasNext()){
 				MyUtil.LOG_V(TAG, "划线");
         		DrawPath drawPath = iter.next();
 //				drawPath.paint.setStrokeWidth(drawPath.strokeWidth / drawPath.ratio);//根据缩放比例，改变画笔粗细
 //        		mCanvas.drawPath(drawPath.path, drawPath.paint);
-				if (null == drawPath.word) {
-					drawPath.paint.setStrokeWidth(drawPath.strokeWidth / drawPath.ratio);//根据缩放比例，改变画笔粗细
-					mCanvas.drawPath(drawPath.path, drawPath.paint);
-				} else {
-					mCanvas.drawText(drawPath.word.getWordString(), drawPath.word.getLeft(),
-							drawPath.word.getTop(),
-							drawPath.word.getPaint());
-				}
+				drawAll(drawPath);
         	}
         }
 		//③、将源图画入新的画布中
@@ -315,6 +317,9 @@ public class DrawZoomImageView extends View {
 		case STATUS_XP:
 			lineEvevn(event);
 			break;
+		case STATUS_ARROW:
+			arrowEvevn(event);
+			break;
 		case STATUS_WORD:
 			wordEven(event);
 			break;
@@ -322,6 +327,50 @@ public class DrawZoomImageView extends View {
 			break;
 		}
 		return true;
+	}
+
+	private void arrowEvevn(MotionEvent event) {
+		float sx = 0, sy = 0, ex, ey;
+		switch (event.getActionMasked()) {
+		case MotionEvent.ACTION_DOWN:
+			if (event.getPointerCount() == 1) {
+				float x = event.getX();
+				float y = event.getY();
+				MyUtil.LOG_V(TAG, "单指按下x" + x + "  y" + y);
+				sx = (x - totalTranslateX) / totalRatio;
+				sy = (y - totalTranslateY) / totalRatio;
+				mDp = new DrawPath(currentStatus);
+				MyUtil.LOG_V(TAG, "手指放下，当前线术" + mPathList.size());
+				initLinePaint();
+				//单指触摸，为编辑模式
+			}
+			break;
+		case MotionEvent.ACTION_MOVE:
+			if (event.getPointerCount() == 1) {
+				MyUtil.LOG_V(TAG, "单指滑动，开始画画");
+				float move_x = event.getX();
+				float move_y = event.getY();
+				//查看Matrix原理（矩阵操作）
+				ex = (move_x - totalTranslateX) / totalRatio; //还原平移
+				ey = (move_y - totalTranslateY) / totalRatio;
+				Arrow aw = new Arrow((int) sx, (int) sy, (int) ex, (int) ey, mPaint);
+				mDp.arrow = aw;
+				mPaint.setStrokeWidth(lineStrokeWidth / totalRatio); //将画笔变细
+				drawAL(aw.sx, aw.sy, aw.ex, aw.ey); //划箭头
+			}
+			break;
+		case MotionEvent.ACTION_UP:
+			MyUtil.LOG_D(TAG, "保存有效箭头");
+			MyUtil.LOG_V(TAG, "手指抬起了，将线条放入集合，数量" + mPathList.size());
+			mDp.ratio = totalRatio; //保存缩放比例
+			mPathList.add(mDp);
+			mAllPathList.add(mDp);
+			break;
+		default:
+			break;
+		}
+		// 调用onDraw()方法绘制图片
+		invalidate();
 	}
 
 	private void wordEven(MotionEvent event) {
@@ -360,7 +409,7 @@ public class DrawZoomImageView extends View {
 
 				String word = etWord.getText().toString().trim();
 				if (!TextUtils.isEmpty(word)) {
-					mDp = new DrawPath();
+					mDp = new DrawPath(currentStatus);
 					initWordPaint();
 					Word wor = new Word(x, y, mPaint, word);
 					wor.reset(matrix);
@@ -400,7 +449,7 @@ public class DrawZoomImageView extends View {
 				y = (y - totalTranslateY) / totalRatio;
 //				currentStatus = mode.currMode();
 				mPath = new Path();
-				mDp = new DrawPath();
+				mDp = new DrawPath(currentStatus);
 				mDp.path = mPath;
 				MyUtil.LOG_V(TAG, "手指放下，当前线术" + mPathList.size());
 				if (currentStatus == STATUS_TY) {
@@ -503,7 +552,7 @@ public class DrawZoomImageView extends View {
 				y = (y - totalTranslateY) / totalRatio;
 //				currentStatus = mode.currMode();
 				mPath = new Path();
-				mDp = new DrawPath();
+				mDp = new DrawPath(currentStatus);
 				mDp.path = mPath;
 				MyUtil.LOG_V(TAG, "手指放下，当前线术" + mPathList.size());
 				if (currentStatus == STATUS_TY) {
@@ -652,7 +701,7 @@ public class DrawZoomImageView extends View {
 			// 防止出现Immutable bitmap passed to Canvas constructor错误  
 			MyUtil.LOG_V(TAG, "压缩后图片宽高" + currentBitmapWidth + " " + currentBitmapHeight);
 			//创建一副原图大小相同的透明背景图片
-			bgBitmap = Bitmap.createBitmap(sourceBitmap.getWidth(),sourceBitmap.getHeight(), Config.ARGB_8888);
+			bgBitmap = Bitmap.createBitmap(sourceBitmap.getWidth(), sourceBitmap.getHeight(), Config.ARGB_8888);
 //			bgBitmap = Bitmap.createBitmap(sourceBitmap,0,0,sourceBitmap.getWidth(),sourceBitmap.getHeight());
 			mCanvas = new Canvas(bgBitmap);
 			MyUtil.LOG_V(TAG, "创建一个宽高为" + mCanvas.getWidth() + " " + mCanvas.getHeight() + "的画布");
@@ -692,5 +741,63 @@ public class DrawZoomImageView extends View {
 		}
 	}
 	
+	/** 
+	* 画箭头 
+	* @param sx 
+	* @param sy 
+	* @param ex 
+	* @param ey 
+	*/
+	public void drawAL(int sx, int sy, int ex, int ey)
+	{
+		double H = 8; // 箭头高度     
+		double L = 3.5; // 底边的一半     
+		int x3 = 0;
+		int y3 = 0;
+		int x4 = 0;
+		int y4 = 0;
+		double awrad = Math.atan(L / H); // 箭头角度     
+		double arraow_len = Math.sqrt(L * L + H * H); // 箭头的长度     
+		double[] arrXY_1 = rotateVec(ex - sx, ey - sy, awrad, true, arraow_len);
+		double[] arrXY_2 = rotateVec(ex - sx, ey - sy, -awrad, true, arraow_len);
+		double x_3 = ex - arrXY_1[0]; // (x3,y3)是第一端点     
+		double y_3 = ey - arrXY_1[1];
+		double x_4 = ex - arrXY_2[0]; // (x4,y4)是第二端点     
+		double y_4 = ey - arrXY_2[1];
+		Double X3 = new Double(x_3);
+		x3 = X3.intValue();
+		Double Y3 = new Double(y_3);
+		y3 = Y3.intValue();
+		Double X4 = new Double(x_4);
+		x4 = X4.intValue();
+		Double Y4 = new Double(y_4);
+		y4 = Y4.intValue();
+		// 画线     
+		mCanvas.drawLine(sx, sy, ex, ey, mPaint);
+		Path triangle = new Path();
+		triangle.moveTo(ex, ey);
+		triangle.lineTo(x3, y3);
+		triangle.lineTo(x4, y4);
+		triangle.close();
+		mCanvas.drawPath(triangle, mPaint);
+
+	}
+
+	// 计算     
+	public double[] rotateVec(int px, int py, double ang, boolean isChLen, double newLen)
+	{
+		double mathstr[] = new double[2];
+		// 矢量旋转函数，参数含义分别是x分量、y分量、旋转角、是否改变长度、新长度     
+		double vx = px * Math.cos(ang) - py * Math.sin(ang);
+		double vy = px * Math.sin(ang) + py * Math.cos(ang);
+		if (isChLen) {
+			double d = Math.sqrt(vx * vx + vy * vy);
+			vx = vx / d * newLen;
+			vy = vy / d * newLen;
+			mathstr[0] = vx;
+			mathstr[1] = vy;
+		}
+		return mathstr;
+	}
 
 }
