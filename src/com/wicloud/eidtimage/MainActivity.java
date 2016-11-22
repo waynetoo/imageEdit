@@ -178,15 +178,15 @@ public class MainActivity extends Activity implements OnClickListener, OnChecked
 	 *  当前编辑图片状态
 	 * @return 
 	 */
-	public int getCurrStatus(){
+	public int getCurrStatus() {
 		if (rbXp.isChecked()) {
 			return DrawZoomImageView.STATUS_XP;
+		} else if (rbArrow.isChecked()) {
+			return DrawZoomImageView.STATUS_ARROW;// TODO
 		} else if (rbTy.isChecked()) {
 			return DrawZoomImageView.STATUS_TY;
 		} else if (rbWord.isChecked()) {
 			return DrawZoomImageView.STATUS_WORD;
-		} else if (rbArrow.isChecked()) {
-			return DrawZoomImageView.STATUS_ARROW;//TODO
 		}
 		return DrawZoomImageView.STATUS_TY;
 	}
