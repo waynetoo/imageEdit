@@ -1,0 +1,251 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" >
+
+    <ImageView
+        android:id="@+id/iv_result"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:layout_margin="10dip"
+        android:visibility="gone" />
+
+    <RelativeLayout
+        android:id="@+id/rl_contrl"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/iv_result" >
+
+        <com.wicloud.editimage.DrawZoomImageView
+            android:id="@+id/iv_photo"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:layout_above="@+id/ll_btn"
+            android:background="#000000" />
+
+        <LinearLayout
+            android:id="@+id/ll_btn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_above="@+id/ll_btn1"
+            android:background="@color/gray"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:padding="5dip" >
+
+            <TextView
+                android:id="@+id/bar_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:minWidth="60dip"
+                android:text="画笔宽度" />
+
+            <SeekBar
+                android:id="@+id/seekBar"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dip"
+                android:layout_marginRight="20dip" />
+        </LinearLayout>
+
+        <HorizontalScrollView
+            android:id="@+id/ll_btn1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_above="@+id/ll_btn2"
+            android:background="@color/darkGray"
+            android:gravity="center_vertical" >
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:orientation="horizontal" >
+
+                <LinearLayout
+                    android:id="@+id/ll_edit"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal" >
+
+                    <Button
+                        android:id="@+id/btn_revoke"
+                        android:layout_width="wrap_content"
+                        android:layout_height="35dp"
+                        android:text="撤销" />
+
+                    <Button
+                        android:id="@+id/btn_recovery"
+                        android:layout_width="wrap_content"
+                        android:layout_height="35dp"
+                        android:text="恢复" />
+                </LinearLayout>
+
+                <RadioGroup
+                    android:id="@+id/color"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@android:color/transparent"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal" >
+
+                    <RadioButton
+                        android:id="@+id/rb_xp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="10dp"
+                        android:background="@drawable/imgedit_rect_selector_bg"
+                        android:button="@null"
+                        android:padding="3dip"
+                        android:text="橡皮" />
+
+                    <RadioButton
+                        android:id="@+id/rb_arrow"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="10dp"
+                        android:background="@drawable/imgedit_rect_selector_bg"
+                        android:button="@null"
+                        android:padding="3dip"
+                        android:text="箭头" />
+
+                    <RadioButton
+                        android:id="@+id/red"
+                        android:layout_width="35dp"
+                        android:layout_height="35dp"
+                        android:layout_margin="10dp"
+                        android:background="@drawable/imgedit_red_rect_selector"
+                        android:button="@null"
+                        android:checked="true" />
+
+                    <RadioButton
+                        android:id="@+id/yellow"
+                        android:layout_width="35dp"
+                        android:layout_height="35dp"
+                        android:layout_margin="10dp"
+                        android:background="@drawable/imgedit_yellow_rect_selector"
+                        android:button="@null" />
+
+                    <RadioButton
+                        android:id="@+id/green"
+                        android:layout_width="35dp"
+                        android:layout_height="35dp"
+                        android:layout_margin="10dp"
+                        android:background="@drawable/imgedit_green_rect_selector"
+                        android:button="@null" />
+
+                    <RadioButton
+                        android:id="@+id/blue"
+                        android:layout_width="35dp"
+                        android:layout_height="35dp"
+                        android:layout_margin="10dp"
+                        android:background="@drawable/imgedit_bule_rect_selector"
+                        android:button="@null" />
+
+                    <RadioButton
+                        android:id="@+id/white"
+                        android:layout_width="35dp"
+                        android:layout_height="35dp"
+                        android:layout_margin="10dp"
+                        android:background="@drawable/imgedit_white_rect_selector"
+                        android:button="@null" />
+
+                    <RadioButton
+                        android:id="@+id/black"
+                        android:layout_width="35dp"
+                        android:layout_height="35dp"
+                        android:layout_margin="10dp"
+                        android:background="@drawable/imgedit_black_rect_selector"
+                        android:button="@null" />
+                </RadioGroup>
+            </LinearLayout>
+        </HorizontalScrollView>
+
+        <LinearLayout
+            android:id="@+id/ll_btn2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:background="@color/Gainsboro"
+            android:gravity="center_vertical"
+            android:orientation="horizontal" >
+
+            <TextView
+                android:id="@+id/tv_open"
+                android:layout_width="0dip"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:padding="10dip"
+                android:text="打开"
+                android:textColor="@android:color/holo_blue_light"
+                />
+
+            <TextView
+                android:id="@+id/tv_cancel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:padding="10dip"
+                android:text="取消"
+                android:textColor="@android:color/holo_blue_light" />
+
+            <RadioGroup
+                android:id="@+id/action"
+                android:layout_width="0dip"
+                android:layout_height="wrap_content"
+                android:layout_weight="2"
+                android:background="@android:color/transparent"
+                android:gravity="center"
+                android:orientation="horizontal" >
+
+                <RadioButton
+                    android:id="@+id/rb_ty"
+                    android:layout_width="0dip"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:background="@drawable/imgedit_bottom_text_selector"
+                    android:button="@null"
+                    android:checked="true"
+                    android:gravity="center"
+                    android:padding="10dip"
+                    android:text="涂鸦" />
+
+                <RadioButton
+                    android:id="@+id/rb_word"
+                    android:layout_width="0dip"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:background="@drawable/imgedit_bottom_text_selector"
+                    android:button="@null"
+                    android:gravity="center"
+                    android:padding="10dip"
+                    android:text="文字" />
+            </RadioGroup>
+
+            <TextView
+                android:id="@+id/tv_finish"
+                android:layout_width="0dip"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:padding="10dip"
+                android:text="预览"
+                android:textColor="@android:color/holo_blue_light" />
+
+            <TextView
+                android:id="@+id/tv_ok"
+                android:layout_width="0dip"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:padding="10dip"
+                android:text="完成"
+                android:textColor="@android:color/holo_blue_light" 
+                android:visibility="gone"
+                />
+        </LinearLayout>
+    </RelativeLayout>
+
+</RelativeLayout>
