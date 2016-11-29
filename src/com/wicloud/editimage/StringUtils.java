@@ -35,7 +35,7 @@
  * see <http://www.coolservlets.com>.
  */
 
-package com.wicloud.eidtimage;
+package com.wicloud.editimage;
 
 import java.io.ByteArrayOutputStream;
 import java.io.UnsupportedEncodingException;

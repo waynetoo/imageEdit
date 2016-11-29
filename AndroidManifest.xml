@@ -12,7 +12,7 @@
         android:hardwareAccelerated="false"
         android:theme="@android:style/Theme.Light"
         android:label="@string/app_name">
-        <activity android:name="com.wicloud.eidtimage.MainActivity">
+        <activity android:name="com.wicloud.editimage.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
 

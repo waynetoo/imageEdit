@@ -1,4 +1,4 @@
-package com.wicloud.eidtimage;
+package com.wicloud.editimage;
 
 import android.graphics.Matrix;
 import android.graphics.Paint;

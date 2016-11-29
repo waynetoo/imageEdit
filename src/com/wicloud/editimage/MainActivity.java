@@ -1,4 +1,4 @@
-package com.wicloud.eidtimage;
+package com.wicloud.editimage;
 
 import java.io.BufferedInputStream;
 import java.io.FileInputStream;
@@ -123,6 +123,7 @@ public class MainActivity extends Activity implements OnClickListener, OnChecked
 				bar_title.setTextColor(Color.BLACK);
 				break;
 			case R.id.rb_arrow:
+				bar_title.setTextColor(iv_photo.getTyColor());
 				break;
 			case R.id.green:
 				iv_photo.setTyColor(Color.GREEN);
@@ -161,7 +162,10 @@ public class MainActivity extends Activity implements OnClickListener, OnChecked
 				rbArrow.setVisibility(View.VISIBLE);
 				break;
 			case R.id.rb_word:
-				rbArrow.setVisibility(View.GONE);//TODO
+				if (rbArrow.isSelected()) {
+					( (RadioButton)findViewById(R.id.red)).setSelected(true);
+				}
+				rbArrow.setVisibility(View.GONE);// TODO
 				break;
 			}
 		}
@@ -181,13 +185,19 @@ public class MainActivity extends Activity implements OnClickListener, OnChecked
 	public int getCurrStatus() {
 		if (rbXp.isChecked()) {
 			return DrawZoomImageView.STATUS_XP;
-		} else if (rbArrow.isChecked()) {
-			return DrawZoomImageView.STATUS_ARROW;// TODO
-		} else if (rbTy.isChecked()) {
+		}
+
+		if (rbTy.isChecked()) {
+			if (rbArrow.isChecked()) {
+				return DrawZoomImageView.STATUS_ARROW;// TODO
+			}
 			return DrawZoomImageView.STATUS_TY;
-		} else if (rbWord.isChecked()) {
+		}
+
+		if (rbWord.isChecked()) {
 			return DrawZoomImageView.STATUS_WORD;
 		}
+
 		return DrawZoomImageView.STATUS_TY;
 	}
 

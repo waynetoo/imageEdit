@@ -4,6 +4,10 @@
     <color name="Gainsboro">#DCDCDC</color>
     <color name="darkGray">#A9A9A9</color>
     <color name="gray">#808080</color>
-  
+    <color name="lightskyblue">#87CEFA</color> <!-- 亮天蓝色 -->
+    <color name="cornflowerblue">#6495ED</color> <!-- 菊兰色 -->
+    <color name="lawngreen">#7CFC00</color> <!-- 草绿色 -->
+    <color name="wheat">#F5DEB3</color> <!-- 浅黄色 -->
+    <color name="F5F5F5">#F5F5F5</color>
 
 </resources>
