@@ -45,7 +45,11 @@
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="10dip"
-                android:layout_marginRight="20dip" />
+                android:layout_marginRight="20dip"
+                android:maxHeight="5.0dip"
+                android:minHeight="5.0dip"
+                android:progressDrawable="@drawable/image_edit_seekbar"
+                android:thumb="@drawable/image_edit_seekbar_thumb_selector" />
         </LinearLayout>
 
         <HorizontalScrollView
@@ -73,12 +77,14 @@
                         android:id="@+id/btn_revoke"
                         android:layout_width="wrap_content"
                         android:layout_height="35dp"
+                        android:gravity="center"
                         android:text="撤销" />
 
                     <Button
                         android:id="@+id/btn_recovery"
                         android:layout_width="wrap_content"
                         android:layout_height="35dp"
+                        android:gravity="center"
                         android:text="恢复" />
                 </LinearLayout>
 
@@ -94,7 +100,7 @@
                         android:id="@+id/rb_xp"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_margin="10dp"
+                        android:layout_margin="6dp"
                         android:background="@drawable/imgedit_rect_selector_bg"
                         android:button="@null"
                         android:padding="3dip"
@@ -104,7 +110,7 @@
                         android:id="@+id/rb_arrow"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_margin="10dp"
+                        android:layout_margin="6dp"
                         android:background="@drawable/imgedit_rect_selector_bg"
                         android:button="@null"
                         android:padding="3dip"
@@ -114,7 +120,7 @@
                         android:id="@+id/red"
                         android:layout_width="35dp"
                         android:layout_height="35dp"
-                        android:layout_margin="10dp"
+                        android:layout_margin="6dp"
                         android:background="@drawable/imgedit_red_rect_selector"
                         android:button="@null"
                         android:checked="true" />
@@ -123,7 +129,7 @@
                         android:id="@+id/yellow"
                         android:layout_width="35dp"
                         android:layout_height="35dp"
-                        android:layout_margin="10dp"
+                        android:layout_margin="6dp"
                         android:background="@drawable/imgedit_yellow_rect_selector"
                         android:button="@null" />
 
@@ -131,7 +137,7 @@
                         android:id="@+id/green"
                         android:layout_width="35dp"
                         android:layout_height="35dp"
-                        android:layout_margin="10dp"
+                        android:layout_margin="6dp"
                         android:background="@drawable/imgedit_green_rect_selector"
                         android:button="@null" />
 
@@ -139,7 +145,7 @@
                         android:id="@+id/blue"
                         android:layout_width="35dp"
                         android:layout_height="35dp"
-                        android:layout_margin="10dp"
+                        android:layout_margin="6dp"
                         android:background="@drawable/imgedit_bule_rect_selector"
                         android:button="@null" />
 
@@ -147,7 +153,7 @@
                         android:id="@+id/white"
                         android:layout_width="35dp"
                         android:layout_height="35dp"
-                        android:layout_margin="10dp"
+                        android:layout_margin="6dp"
                         android:background="@drawable/imgedit_white_rect_selector"
                         android:button="@null" />
 
@@ -155,7 +161,7 @@
                         android:id="@+id/black"
                         android:layout_width="35dp"
                         android:layout_height="35dp"
-                        android:layout_margin="10dp"
+                        android:layout_margin="6dp"
                         android:background="@drawable/imgedit_black_rect_selector"
                         android:button="@null" />
                 </RadioGroup>
@@ -179,8 +185,7 @@
                 android:gravity="center"
                 android:padding="10dip"
                 android:text="打开"
-                android:textColor="@android:color/holo_blue_light"
-                />
+                android:textColor="@android:color/holo_blue_light" />
 
             <TextView
                 android:id="@+id/tv_cancel"
@@ -189,8 +194,8 @@
                 android:gravity="center"
                 android:padding="10dip"
                 android:text="取消"
-                android:textColor="@android:color/holo_blue_light" 
-                android:visibility="gone"/>
+                android:textColor="@android:color/holo_blue_light"
+                android:visibility="gone" />
 
             <RadioGroup
                 android:id="@+id/action"
@@ -243,9 +248,8 @@
                 android:gravity="center"
                 android:padding="10dip"
                 android:text="完成"
-                android:textColor="@android:color/holo_blue_light" 
-                android:visibility="gone"
-                />
+                android:textColor="@android:color/holo_blue_light"
+                android:visibility="gone" />
         </LinearLayout>
     </RelativeLayout>
 

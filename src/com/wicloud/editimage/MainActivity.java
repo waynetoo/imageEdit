@@ -27,7 +27,6 @@ import android.widget.TextView;
 
 import com.wicloud.editimage.demo.R;
 
-
 public class MainActivity extends Activity implements OnClickListener, OnCheckedChangeListener {
 
 	private DrawZoomImageView iv_photo;
@@ -39,7 +38,7 @@ public class MainActivity extends Activity implements OnClickListener, OnChecked
 	private RadioGroup colorGroup, action;
 	private boolean isBack = true;
 	private SeekBar seekBar; // 控制画笔宽度
-	
+
 	private RadioButton rbTy, rbXp, rbWord, rbArrow;
 	private int currStatu;//当前状态；
 
@@ -68,7 +67,7 @@ public class MainActivity extends Activity implements OnClickListener, OnChecked
 		btn_revoke = (Button) findViewById(R.id.btn_revoke);
 		btn_recovery = (Button) findViewById(R.id.btn_recovery);
 		tv_finish = (TextView) findViewById(R.id.tv_finish);
-		
+
 		rbTy = (RadioButton) findViewById(R.id.rb_ty);
 		rbXp = (RadioButton) findViewById(R.id.rb_xp);
 		rbWord = (RadioButton) findViewById(R.id.rb_word);
@@ -85,6 +84,7 @@ public class MainActivity extends Activity implements OnClickListener, OnChecked
 		action.setOnCheckedChangeListener(this);
 
 		seekBar.setOnSeekBarChangeListener(new OnSeekBarChangeListener() {
+
 			@Override
 			public void onStopTrackingTouch(SeekBar seekBar) {
 			}
@@ -207,11 +207,11 @@ public class MainActivity extends Activity implements OnClickListener, OnChecked
 			seekBar.setMax(iv_photo.xpStrokeWidthMax); // 设置最大
 			seekBar.setProgress(iv_photo.getXpStrokeWidth());
 		} else if (statu == DrawZoomImageView.STATUS_TY) {
-			bar_title.setText("画笔宽度");
+			bar_title.setText("画笔宽度/颜色");
 			seekBar.setMax(iv_photo.lineStrokeWidthMax); // 设置最大
 			seekBar.setProgress(iv_photo.getTyStrokeWidth());
 		} else if (statu == DrawZoomImageView.STATUS_ARROW) {
-			bar_title.setText("箭头宽度");
+			bar_title.setText("箭头宽度/颜色");
 			seekBar.setMax(iv_photo.lineStrokeWidthMax); // 设置最大
 			seekBar.setProgress(iv_photo.getTyStrokeWidth());
 		} else if (statu == DrawZoomImageView.STATUS_WORD) {
@@ -226,16 +226,18 @@ public class MainActivity extends Activity implements OnClickListener, OnChecked
 		if (data != null) {
 			Uri uri = data.getData();
 			try {
-				String[] proj = {MediaStore.Images.Media.DATA};
+				String[] proj = {
+						MediaStore.Images.Media.DATA
+				};
 				//好像是android多媒体数据库的封装接口，具体的看Android文档
-	            Cursor cursor = managedQuery(uri, proj, null, null, null); 
+				Cursor cursor = managedQuery(uri, proj, null, null, null);
 				//按我个人理解 这个是获得用户选择的图片的索引值
-	            int column_index = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
+				int column_index = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
 				//将光标移至开头 ，这个很重要，不小心很容易引起越界
 				cursor.moveToFirst();
 				//最后根据索引值获取图片路径
 				String path = cursor.getString(column_index);
-				
+				System.out.println("image Path :" + path);
 				Bitmap bitmap = readBitmapAutoSize(path, iv_photo.getWidth(), iv_photo.getHeight());
 				iv_photo.setImageBitmap(bitmap);
 			} catch (Exception e) {
@@ -261,7 +263,7 @@ public class MainActivity extends Activity implements OnClickListener, OnChecked
 		case R.id.tv_finish: // 查看编辑好的图片
 			rl_contrl.setVisibility(View.GONE);
 			iv_result.setVisibility(View.VISIBLE);
-			Bitmap bitmap = iv_photo.getImageBitmap();
+			Bitmap bitmap = iv_photo.getImageBitmap(); // 可保存为本地涂鸦图片
 			iv_result.setImageBitmap(bitmap);
 			isBack = false;
 			break;
