@@ -189,7 +189,8 @@
                 android:gravity="center"
                 android:padding="10dip"
                 android:text="取消"
-                android:textColor="@android:color/holo_blue_light" />
+                android:textColor="@android:color/holo_blue_light" 
+                android:visibility="gone"/>
 
             <RadioGroup
                 android:id="@+id/action"

@@ -162,8 +162,8 @@ public class MainActivity extends Activity implements OnClickListener, OnChecked
 				rbArrow.setVisibility(View.VISIBLE);
 				break;
 			case R.id.rb_word:
-				if (rbArrow.isSelected()) {
-					( (RadioButton)findViewById(R.id.red)).setSelected(true);
+				if (rbArrow.isChecked()) {
+					((RadioButton) findViewById(R.id.red)).setChecked(true);
 				}
 				rbArrow.setVisibility(View.GONE);// TODO
 				break;
