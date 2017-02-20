@@ -9,6 +9,5 @@
 <img src="https://github.com/wicloud/imageEdit/blob/master/assets/imgEdit_sample.png" width="40%" height="40%" />
 <img src="https://github.com/wicloud/imageEdit/blob/master/assets/2.png" width="40%" height="40%" />
 </center>
-</center>
 
 
